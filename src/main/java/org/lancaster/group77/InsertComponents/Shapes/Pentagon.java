@@ -2,30 +2,25 @@ package org.lancaster.group77.InsertComponents.Shapes;
 
 import org.lancaster.group77.DisplayComponents.Shape;
 import org.lancaster.group77.FileSystem.CSPPTFile;
+import org.lancaster.group77.FileSystem.FileChooser;
+import org.lancaster.group77.FileSystem.GlobalVariables;
 import org.lancaster.group77.InsertComponents.DraggableComponent;
 import org.lancaster.group77.InsertComponents.impl.MouseHandler;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Pentagon extends DraggableComponent {
-    private JPanel panel;
-    private Shape shape;
-
-
+public class Pentagon extends BaseShape {
     public Pentagon(int x, int y, int width, int height, MouseHandler listener, JLayeredPane frame, CSPPTFile file, int layer1){
-        super(x,y,width,height,listener,frame, file );
+        super(x,y,width,height,listener,frame, file,"Pentagon",layer1, GlobalVariables.cspptFrame.getCurrentSlideInt());
+    }
 
-        //panel.setBounds(7,7,width-14,height-14);
-        panel = new ShapeBorder(this);
-        add(panel);
-        panel.addMouseListener(listener);
-        panel.addMouseMotionListener(listener);
-        panel.setOpaque(false);
-        panel.setBounds(15, 15, width - 30, height - 30);
-        shape = new Shape(x,y,width,height, layer1, "pentagon");
-        file.getSlides().get(0).addObject(shape);
+    public Pentagon(Shape shape1, MouseHandler listener, JLayeredPane frame, CSPPTFile file){
+        super(shape1,listener,frame, file,GlobalVariables.cspptFrame.getCurrentSlideInt());
+    }
 
+    public Pentagon(Shape shape1, MouseHandler listener, JLayeredPane frame, CSPPTFile file,boolean isOpeningFile){
+        super(shape1,listener,frame, file,GlobalVariables.cspptFrame.getCurrentSlideInt(),isOpeningFile);
     }
 
     public void resizePanel(int inputX, int inputY) {
@@ -35,16 +30,11 @@ public class Pentagon extends DraggableComponent {
 
 
 
-    public void resizePentagon(int inputX, int inputY) {
-        this.setSize(inputX-14, inputY-14);
+    @Override
+    public void resizeComponent(int inputX, int inputY) {
+        this.setSize(inputX - 14, inputY - 14);
         repaint();
-        shape.setWidth(inputX);
-        shape.setHeight(inputY);
-    }
-
-    public void setLocation1(int x, int y){
-        shape.setX(x);
-        shape.setY(y);
+        super.resizeComponent(inputX,inputY);
     }
 
     @Override
@@ -57,9 +47,12 @@ public class Pentagon extends DraggableComponent {
         Polygon polygon = new Polygon();
         for (int i = 0; i < sides; i++) {
             double angle = i * 2 * Math.PI / sides - Math.PI / 2;
-            int x = (int) (getWidth() / 2 + getWidth() / 2 * Math.cos(angle));
-            int y = (int) (getHeight() / 2 + getHeight() / 2 * Math.sin(angle));
+            int x = (int) ((getWidth()-15) / 2 + (getWidth()-15) / 2 * Math.cos(angle));
+            int y = (int) ((getHeight()-15) / 2 + (getHeight()-15) / 2 * Math.sin(angle));
+            x += 7;
+            y += 7;
             polygon.addPoint(x, y);
+
         }
 
         g.fillPolygon(polygon);
@@ -67,13 +60,5 @@ public class Pentagon extends DraggableComponent {
         g.setColor(Color.BLACK);
         g.drawPolygon(polygon);
 
-    }
-
-    public void changeBackgroundColour(){
-        JColorChooser colorChooser = new JColorChooser();
-        Color  color = JColorChooser.showDialog(null, "select", Color.RED);
-        String colour1 = String.valueOf(color.getRGB());
-        shape.setColor(colour1);
-        repaint();
     }
 }

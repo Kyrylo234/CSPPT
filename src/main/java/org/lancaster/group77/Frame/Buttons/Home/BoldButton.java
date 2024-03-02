@@ -14,5 +14,6 @@ public class BoldButton extends IconButton {
 
     public void BoldButtonFunction(){
         handler.setBold();
+
     }
 }

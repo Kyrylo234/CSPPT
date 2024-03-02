@@ -13,6 +13,8 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             CSPPTFrame cspptFrame = new CSPPTFrame();
             cspptFrame.setVisible(true);
+            //add first slide
+            cspptFrame.getSlideManager().addSlide();
         });
     }
 }

@@ -2,7 +2,9 @@ package org.lancaster.group77.FileSystem.Strucutre;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class Head {
+import java.util.Objects;
+
+public class Head implements java.io.Serializable{
     private String author;
     private String file_name;
     private String created_time;
@@ -22,7 +24,6 @@ public class Head {
         jsonObject.put("updated_time", updated_time);
         jsonObject.put("index_start_position", 513);
         jsonObject.put("index_size", index_json_str.getBytes().length);
-        head_json_size = jsonObject.toJSONString().getBytes().length;
 
 
         return jsonObject;
@@ -83,5 +84,18 @@ public class Head {
 
     public int getHeadSize() {
         return head_json_size;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Head head = (Head) object;
+        return head_json_size == head.head_json_size && Objects.equals(author, head.author) && Objects.equals(file_name, head.file_name) && Objects.equals(created_time, head.created_time) && Objects.equals(updated_time, head.updated_time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, file_name, created_time, updated_time, head_json_size);
     }
 }

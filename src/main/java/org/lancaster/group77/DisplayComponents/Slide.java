@@ -2,19 +2,31 @@ package org.lancaster.group77.DisplayComponents;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import javafx.scene.control.Tab;
 import org.lancaster.group77.FileSystem.GlobalVariables;
 import org.lancaster.group77.FileSystem.Tools.GeneralTools;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class Slide {
+public class Slide implements java.io.Serializable {
     private int id;
     private ArrayList<Text> texts = new ArrayList<>();
     private ArrayList<Image> images = new ArrayList<>();
     private ArrayList<Shape> shapes = new ArrayList<>();
     private ArrayList<CodeSection> codeSections = new ArrayList<>();
+    private ArrayList<Audio> audios = new ArrayList<>();
+    private ArrayList<CSChart> csCharts = new ArrayList<>();
+    private ArrayList<MathChart> mathCharts = new ArrayList<>();
+    private ArrayList<Table> tables = new ArrayList<>();
+    private ArrayList<Video> videos = new ArrayList<>();
+    private ArrayList<Animation> animations = new ArrayList<>();
+    private ArrayList<SlideData> slideDatas = new ArrayList<>();
+    private ArrayList<CSBox> csBoxs = new ArrayList<>();
+    private ArrayList<CSLine> csLines = new ArrayList<>();
+
     //TODO FileSystem add more attributes
 
 
@@ -30,7 +42,7 @@ public class Slide {
      * Constructor
      * Create a new Slide object with all the attributes
      *
-     * @param id   The id of the slide
+     * @param id    The id of the slide
      * @param texts The text of the slide
      */
     public Slide(int id, ArrayList<Text> texts) {
@@ -42,8 +54,8 @@ public class Slide {
      * Constructor
      * Create a new Slide object with all the attributes
      *
-     * @param id   The id of the slide
-     * @param texts The text of the slide
+     * @param id     The id of the slide
+     * @param texts  The text of the slide
      * @param images The images of the slide
      * @param shapes The shapes of the slide
      */
@@ -103,24 +115,61 @@ public class Slide {
     /**
      * Add an object to the slide
      * For example, add a text object to the slide
+     *
      * @param object The object to be added
      */
     public <T> void addObject(T object) {
         //TODO FileSystem add more attributes
-        if(object instanceof Text text){
+        if (object instanceof Text text) {
             texts.add(text);
         }
 
-        if(object instanceof Image image){
+        if (object instanceof Image image) {
             images.add(image);
         }
 
-        if(object instanceof Shape shape){
+        if (object instanceof Shape shape) {
             shapes.add(shape);
         }
 
-        if(object instanceof CodeSection codeSection){
+        if (object instanceof CodeSection codeSection) {
             codeSections.add(codeSection);
+        }
+
+        if (object instanceof Audio audio) {
+            audios.add(audio);
+        }
+
+        if (object instanceof CSChart csChart) {
+            csCharts.add(csChart);
+        }
+
+        if (object instanceof MathChart mathChart) {
+            mathCharts.add(mathChart);
+        }
+
+        if (object instanceof Table table) {
+            tables.add(table);
+        }
+
+        if (object instanceof Video video) {
+            videos.add(video);
+        }
+
+        if (object instanceof Animation animation) {
+            animations.add(animation);
+        }
+
+        if (object instanceof SlideData slideData) {
+            slideDatas.add(slideData);
+        }
+
+        if (object instanceof CSBox csBox) {
+            csBoxs.add(csBox);
+        }
+
+        if (object instanceof CSLine csLine) {
+            csLines.add(csLine);
         }
     }
 
@@ -146,5 +195,90 @@ public class Slide {
 
     public void setCodeSections(ArrayList<CodeSection> codeSections) {
         this.codeSections = codeSections;
+    }
+
+    public ArrayList<Audio> getAudios() {
+        return audios;
+    }
+
+    public void setAudios(ArrayList<Audio> audios) {
+        this.audios = audios;
+    }
+
+    public ArrayList<CSChart> getCsCharts() {
+        return csCharts;
+    }
+
+    public void setCsCharts(ArrayList<CSChart> csCharts) {
+        this.csCharts = csCharts;
+    }
+
+    public ArrayList<MathChart> getMathCharts() {
+        return mathCharts;
+    }
+
+    public void setMathCharts(ArrayList<MathChart> mathCharts) {
+        this.mathCharts = mathCharts;
+    }
+
+    public ArrayList<Table> getTables() {
+        return tables;
+    }
+
+    public void setTables(ArrayList<Table> tables) {
+        this.tables = tables;
+    }
+
+    public ArrayList<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(ArrayList<Video> videos) {
+        this.videos = videos;
+    }
+
+    public ArrayList<Animation> getAnimations() {
+        return animations;
+    }
+
+    public void setAnimations(ArrayList<Animation> animations) {
+        this.animations = animations;
+    }
+
+    public ArrayList<SlideData> getSlideDatas() {
+        return slideDatas;
+    }
+
+    public void setSlideDatas(ArrayList<SlideData> slideDatas) {
+        this.slideDatas = slideDatas;
+    }
+
+    public ArrayList<CSBox> getCsBoxs() {
+        return csBoxs;
+    }
+
+    public void setCsBoxs(ArrayList<CSBox> csBoxes) {
+        this.csBoxs = csBoxes;
+    }
+
+    public ArrayList<CSLine> getCsLines() {
+        return csLines;
+    }
+
+    public void setCsLines(ArrayList<CSLine> csLines) {
+        this.csLines = csLines;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Slide slide = (Slide) object;
+        return getId() == slide.getId() && Objects.equals(getTexts(), slide.getTexts()) && Objects.equals(getImages(), slide.getImages()) && Objects.equals(getShapes(), slide.getShapes()) && Objects.equals(getCodeSections(), slide.getCodeSections()) && Objects.equals(getAudios(), slide.getAudios()) && Objects.equals(getCsCharts(), slide.getCsCharts()) && Objects.equals(getMathCharts(), slide.getMathCharts()) && Objects.equals(getTables(), slide.getTables()) && Objects.equals(getVideos(), slide.getVideos()) && Objects.equals(getAnimations(), slide.getAnimations()) && Objects.equals(getSlideDatas(), slide.getSlideDatas()) && Objects.equals(getCsBoxs(), slide.getCsBoxs()) && Objects.equals(getCsLines(), slide.getCsLines());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTexts(), getImages(), getShapes(), getCodeSections(), getAudios(), getCsCharts(), getMathCharts(), getTables(), getVideos(), getAnimations(), getSlideDatas(), getCsBoxs(), getCsLines());
     }
 }

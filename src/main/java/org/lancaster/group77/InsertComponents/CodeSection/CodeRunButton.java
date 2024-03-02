@@ -1,27 +1,22 @@
 package org.lancaster.group77.InsertComponents.CodeSection;
 
-import org.lancaster.group77.Frame.Bars.InsertBar;
-import org.lancaster.group77.Frame.Buttons.Insert.InsertCodeSectionButton;
+import org.lancaster.group77.FileSystem.GlobalVariables;
 import org.lancaster.group77.InsertComponents.impl.MouseHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class CodeRunButton extends JButton {
-    private InsertBar bar;
     private CodeSectionComponent component;
-    private int count = 0;
+    private JLayeredPane codeRunPanel;
 
-    public CodeRunButton(int x, int y, int width, int height, MouseHandler listener, InsertBar bar, CodeSectionEditor codeSectionEditor) {
+    public CodeRunButton(int x, int y, int width, int height, MouseHandler listener, CodeSectionEditor codeSectionEditor) {
         super();
-        this.bar = bar;
 
-        setBounds(codeSectionEditor.getX()-20, codeSectionEditor.getY(), width, height);
+        setBounds(codeSectionEditor.getX() - 20, codeSectionEditor.getY(), width, height);
         setOpaque(false);
         setBorder(null);
         setContentAreaFilled(false);
@@ -30,7 +25,7 @@ public class CodeRunButton extends JButton {
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
         setIcon(scaledIcon);
 
-        component = new CodeSectionComponent(codeSectionEditor.getX(), codeSectionEditor.getY() + codeSectionEditor.getHeight(), 200, 100, listener, bar.getFrame().getPane(), bar.getFrame().getFile());
+        component = new CodeSectionComponent(codeSectionEditor.getX() + 7, codeSectionEditor.getY() + codeSectionEditor.getHeight() - 7, codeSectionEditor.getWidth() - 14, 80, listener, GlobalVariables.cspptFrame.getPane(), GlobalVariables.cspptFrame.getFile());
         codeSectionEditor.setCodeSectionComponent(component);
 
         addActionListener(new ActionListener() {
@@ -38,13 +33,8 @@ public class CodeRunButton extends JButton {
             public void actionPerformed(ActionEvent e) {
 
                 try {
-                    component.runCode(generateHtmlWithJs(codeSectionEditor.getjTextPane().getText()), count);
-                    if (count == 0) {
-                        bar.getFrame().getPane().add(component);
-                        bar.getFrame().getPane().moveToFront(component);
-                    }
-                    bar.getFrame().getPane().repaint();
-                    count++;
+                    component.runCode(generateHtmlWithJs(codeSectionEditor.getCodeArea().getText()),codeRunPanel);
+                    codeRunPanel.repaint();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -58,7 +48,7 @@ public class CodeRunButton extends JButton {
      * @param jsCode
      * @throws IOException
      */
-    public static String generateHtmlWithJs(String jsCode) throws IOException {
+    public String generateHtmlWithJs(String jsCode) throws IOException {
         String rewriteMethod = "var oldConsoleLog = console.log;\n" +
                 "console.log = function (message) {\n" +
                 "    oldConsoleLog(message);\n" +
@@ -67,11 +57,23 @@ public class CodeRunButton extends JButton {
                 "};\n";
 
         String htmlContent = "<!DOCTYPE html>\n"
-                + "<html>\n<head>\n<title>Test JS Execution</title>\n</head>\n<body>\n"
-                + "<div id='result'></div>\n"
+                + "<html>\n<head>\n<title>Test JS Execution</title>\n</head>\n"
+                + "<body style='background-color: #10102D;color: #FFFFFF;margin: 5; padding: 0;'>\n"
+                + "<div id='result'>"
+                + ">>"
+                + "</div>\n"
+                + "<div style='position: fixed; bottom: 0; left: 2; font-size: 10px; color:#b7b7b7'>Results</div>\n"
                 + "<script>\n" + rewriteMethod + jsCode + "\n</script>\n"
                 + "</body>\n</html>";
 
         return htmlContent;
+    }
+
+    public JLayeredPane getCodeRunPanel() {
+        return codeRunPanel;
+    }
+
+    public void setCodeRunPanel(JLayeredPane codeRunPanel) {
+        this.codeRunPanel = codeRunPanel;
     }
 }

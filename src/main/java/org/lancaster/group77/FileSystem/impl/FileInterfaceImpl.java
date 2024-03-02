@@ -45,6 +45,7 @@ public class FileInterfaceImpl implements FileInterface {
                 }
                 headBuilder.append((char) character);
             }
+
             JSONObject headJson = JSONObject.parseObject(headBuilder.toString());
             Head head = new Head(headJson.getString("author"), headJson.getString("file_name"), headJson.getString("created_time"), headJson.getString("updated_time"));
 
@@ -56,7 +57,8 @@ public class FileInterfaceImpl implements FileInterface {
             for (int i = 0; i < indexArray.size(); i++) {
                 JSONObject index_json = indexArray.getJSONObject(i);
                 JSONObject content_json = JSONObject.parseObject(readFile(fileReader, index_json.getIntValue("position"), index_json.getIntValue("size")));
-                slides.add(newSlide(content_json, i + 1));
+                slides.add(newSlide(content_json, i));
+
             }
 
             // Read the duplicate data of the file
@@ -68,6 +70,7 @@ public class FileInterfaceImpl implements FileInterface {
             }
             JSONArray duplicateDataArr = JSONArray.parseArray(stringBuilder.toString());
             fileReader.close();
+
             return new CSPPTFile(slides, head, duplicateDataArr);
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("File does not exist");
@@ -104,6 +107,7 @@ public class FileInterfaceImpl implements FileInterface {
             writer.write(total);
             writer.close();
             System.err.println("SAVE SUCCESS, path: " + path);
+            return true;
         } catch (IOException e) {
             System.err.println("SAVE ERROR: " + e.getMessage());
         }

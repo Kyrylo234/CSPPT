@@ -1,7 +1,7 @@
 package org.lancaster.group77.FileSystem.impl;
 
 import org.lancaster.group77.FileSystem.Tools.GeneralTools;
-import org.lancaster.group77.InsertComponents.TextBox;
+import org.lancaster.group77.InsertComponents.TextBox.TextBox;
 
 import javax.swing.event.DocumentListener;
 

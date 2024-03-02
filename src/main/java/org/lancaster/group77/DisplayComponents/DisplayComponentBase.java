@@ -4,8 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
-public class DisplayComponentBase {
+public class DisplayComponentBase implements java.io.Serializable{
     private double x = 0;
     private double y = 0;
     private double width = 100;
@@ -17,7 +18,7 @@ public class DisplayComponentBase {
         this.json_name = json_name;
     }
 
-    public DisplayComponentBase(int x, int y, int layer, String json_name, int width1, int height1) {
+    public DisplayComponentBase(double x, double y, int layer, String json_name, double width1, double height1) {
         this.x = x;
         this.y = y;
         this.layer = layer;
@@ -117,5 +118,19 @@ public class DisplayComponentBase {
 
     public double getHeight() {
         return height;
+    }
+
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        DisplayComponentBase that = (DisplayComponentBase) object;
+        return Double.compare(getX(), that.getX()) == 0 && Double.compare(getY(), that.getY()) == 0 && Double.compare(getWidth(), that.getWidth()) == 0 && Double.compare(getHeight(), that.getHeight()) == 0 && Objects.equals(getJson_name(), that.getJson_name());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY(), getWidth(), getHeight(), getJson_name());
     }
 }

@@ -35,4 +35,22 @@ public class ClipboardImpl implements ClipboardInterface {
     public List<Object> paste() {
         return ClipboardManager.clipboard;
     }
+
+    /**
+     * Copies the slide number to the clipboard
+     * @param slideNumber
+     */
+    @Override
+    public void copySlideNumber(int slideNumber) {
+        ClipboardManager.copySlideNumber = slideNumber;
+    }
+
+    /**
+     * Gets the slide number from the clipboard
+     * @return
+     */
+    @Override
+    public int getSlideNumber() {
+        return ClipboardManager.copySlideNumber;
+    }
 }

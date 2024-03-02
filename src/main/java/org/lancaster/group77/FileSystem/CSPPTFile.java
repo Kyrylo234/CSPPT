@@ -1,20 +1,15 @@
 package org.lancaster.group77.FileSystem;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.lancaster.group77.DisplayComponents.Slide;
-import org.lancaster.group77.DisplayComponents.Text;
+import org.lancaster.group77.DisplayComponents.*;
 import org.lancaster.group77.FileSystem.Strucutre.Head;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
-public class CSPPTFile {
+public class CSPPTFile implements java.io.Serializable {
     private ArrayList<Slide> slides;
     private Head head;
     private JSONArray slidesJsonArray;
@@ -80,9 +75,11 @@ public class CSPPTFile {
 
                     for (String keyInner : jsonInnerInner.keySet()) {
                         String value = jsonInnerInner.getString(keyInner);
-                        if (value.length() > 10) {
-                            String keyValue = keyInner + ":" + value;
-                            keyValueOccurrences.put(keyValue, keyValueOccurrences.getOrDefault(keyValue, 0) + 1);
+                        if (!Objects.equals(keyInner, "json_name") && !Objects.equals(keyInner, "x") && !Objects.equals(keyInner, "y") && !Objects.equals(keyInner, "width") && !Objects.equals(keyInner, "height")&&!Objects.equals(keyInner, "line_type")) {
+                            if (value.length() > 10 && !value.contains("#C%S&P$P!T") && !value.contains("@TC@") && !value.contains("@TR@")) {
+                                String keyValue = keyInner + ":" + value;
+                                keyValueOccurrences.put(keyValue, keyValueOccurrences.getOrDefault(keyValue, 0) + 1);
+                            }
                         }
                     }
                 }
@@ -90,7 +87,9 @@ public class CSPPTFile {
         }
 
         // replace duplicate key value pairs #C%S&P$P!T[uniqueId]
-        JSONArray duplicateDataArr = new JSONArray();
+        if (duplicateDataArr == null) {
+            duplicateDataArr = new JSONArray();
+        }
         for (Map.Entry<String, Integer> entry : keyValueOccurrences.entrySet()) {
             if (entry.getValue() > 1) {
                 String[] keyValuePair = entry.getKey().split(":");
@@ -98,7 +97,14 @@ public class CSPPTFile {
 
                 for (int i = 0; i < jsonArray.size(); i++) {
                     for (String keyInner : jsonArray.getJSONObject(i).keySet()) {
-                        jsonArray.getJSONObject(i).getJSONObject(keyInner).put(keyValuePair[0], "#C%S&P$P!T[" + uniqueId + "]");
+                        JSONArray jsonArray_inner = jsonArray.getJSONObject(i).getJSONArray(keyInner);
+                        for (int j = 0; j < jsonArray_inner.size(); j++) {
+                            if (jsonArray_inner.getJSONObject(j).getString(keyValuePair[0]) != null) {
+                                if (jsonArray_inner.getJSONObject(j).getString(keyValuePair[0]).equals(duplicateDataArr.get(uniqueId))) {
+                                    jsonArray_inner.getJSONObject(j).put(keyValuePair[0], "#C%S&P$P!T[" + uniqueId + "]");
+                                }
+                            }
+                        }
                     }
                 }
                 uniqueId++;
@@ -106,7 +112,6 @@ public class CSPPTFile {
         }
 
         slidesJsonArray = jsonArray;
-        this.duplicateDataArr = duplicateDataArr;
     }
 
 
@@ -242,10 +247,188 @@ public class CSPPTFile {
      * Add a new empty slide to the slides
      */
     public void addEmptySlide() {
-        slides.add(new Slide(slides.size() + 2));
+        slides.add(new Slide(slides.size()));
+
+        // add default background color
+        slides.get(slides.size() - 1).setSlideDatas(new ArrayList<>(List.of(new SlideData(GlobalVariables.DEFAULT_BACKGROUND_COLOR))));
     }
 
-    public int numOfSlides(){
+    public int nextSlide() {
+        return slides.size() + 1;
+    }
+
+    public int numOfSlides() {
         return slides.size();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        CSPPTFile cspptFile = (CSPPTFile) object;
+        return Objects.equals(getSlides(), cspptFile.getSlides()) && Objects.equals(getHead(), cspptFile.getHead()) && Objects.equals(getSlidesJsonArray(), cspptFile.getSlidesJsonArray()) && Objects.equals(getDuplicateDataArr(), cspptFile.getDuplicateDataArr());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSlides(), getHead(), getSlidesJsonArray(), getDuplicateDataArr());
+    }
+
+    /**
+     * Remove a data from the CSPPTFile
+     *
+     * @param slideNum
+     * @return
+     * @throws IOException
+     */
+    public void removeData(DisplayComponentBase componentBase, int slideNum) throws IOException {
+        //TODO FileSystem add more attributes
+        switch (componentBase.getJson_name()) {
+            case "text":
+                Text text = (Text) componentBase;
+                ArrayList<Text> texts = this.getSlides().get(slideNum).getTexts();
+                for (int i = 0; i < texts.size(); i++) {
+                    if (texts.get(i).equals(text)) {
+                        texts.remove(text);
+                        break;
+                    }
+                }
+                break;
+            case "shape":
+                Shape shape = (Shape) componentBase;
+                ArrayList<Shape> shapes = this.getSlides().get(slideNum).getShapes();
+                for (int i = 0; i < shapes.size(); i++) {
+                    if (shapes.get(i).equals(shape)) {
+                        shapes.remove(shape);
+                        break;
+                    }
+                }
+                break;
+            case "image":
+                Image image = (Image) componentBase;
+                ArrayList<Image> images = this.getSlides().get(slideNum).getImages();
+                for (int i = 0; i < images.size(); i++) {
+                    if (images.get(i).equals(image)) {
+                        images.remove(image);
+                        break;
+                    }
+                }
+                break;
+            case "codesection":
+                CodeSection codeSection = (CodeSection) componentBase;
+                ArrayList<CodeSection> codeSections = this.getSlides().get(slideNum).getCodeSections();
+                for (int i = 0; i < codeSections.size(); i++) {
+                    if (codeSections.get(i).equals(codeSection)) {
+                        codeSections.remove(codeSection);
+                        break;
+                    }
+                }
+                break;
+            case "audio":
+                Audio audio = (Audio) componentBase;
+                ArrayList<Audio> audios = this.getSlides().get(slideNum).getAudios();
+                for (int i = 0; i < audios.size(); i++) {
+                    if (audios.get(i).equals(audio)) {
+                        audios.remove(audio);
+                        break;
+                    }
+                }
+                break;
+            case "cschart":
+                CSChart csChart = (CSChart) componentBase;
+                ArrayList<CSChart> csCharts = this.getSlides().get(slideNum).getCsCharts();
+                for (int i = 0; i < csCharts.size(); i++) {
+                    if (csCharts.get(i).equals(csChart)) {
+                        csCharts.remove(csChart);
+                        break;
+                    }
+                }
+                break;
+            case "mathchart":
+                MathChart mathChart = (MathChart) componentBase;
+                ArrayList<MathChart> mathCharts = this.getSlides().get(slideNum).getMathCharts();
+                for (int i = 0; i < mathCharts.size(); i++) {
+                    if (mathCharts.get(i).equals(mathChart)) {
+                        mathCharts.remove(mathChart);
+                        break;
+                    }
+                }
+                break;
+            case "table":
+                Table table = (Table) componentBase;
+                ArrayList<Table> tables = this.getSlides().get(slideNum).getTables();
+                for (int i = 0; i < tables.size(); i++) {
+                    if (tables.get(i).equals(table)) {
+                        tables.remove(table);
+                        break;
+                    }
+                }
+                break;
+            case "video":
+                Video video = (Video) componentBase;
+                ArrayList<Video> videos = this.getSlides().get(slideNum).getVideos();
+                for (int i = 0; i < videos.size(); i++) {
+                    if (videos.get(i).equals(video)) {
+                        videos.remove(video);
+                        break;
+                    }
+                }
+                break;
+            case "animation":
+                Animation animation = (Animation) componentBase;
+                ArrayList<Animation> animations = this.getSlides().get(slideNum).getAnimations();
+                for (int i = 0; i < animations.size(); i++) {
+                    if (animations.get(i).equals(animation)) {
+                        animations.remove(animation);
+                        break;
+                    }
+                }
+                break;
+            case "slidedata":
+                SlideData slideData = (SlideData) componentBase;
+                ArrayList<SlideData> slideDatas = this.getSlides().get(slideNum).getSlideDatas();
+                for (int i = 0; i < slideDatas.size(); i++) {
+                    if (slideDatas.get(i).equals(slideData)) {
+                        slideDatas.remove(slideData);
+                        break;
+                    }
+                }
+                break;
+            case "cs_box":
+                CSBox csBox = (CSBox) componentBase;
+                ArrayList<CSBox> csBoxes = this.getSlides().get(slideNum).getCsBoxs();
+                for (int i = 0; i < csBoxes.size(); i++) {
+                    if (csBoxes.get(i).equals(csBox)) {
+                        csBoxes.remove(csBox);
+                        break;
+                    }
+                }
+                break;
+            case "cs_line":
+                CSLine csLine = (CSLine) componentBase;
+                ArrayList<CSLine> csLines = this.getSlides().get(slideNum).getCsLines();
+                for (int i = 0; i < csLines.size(); i++) {
+                    if (csLines.get(i).equals(csLine)) {
+                        csLines.remove(csLine);
+                        break;
+                    }
+                }
+                break;
+            default:
+                System.out.println("Error: removeData: json_name not found");
+        }
+    }
+
+    public void removeSlide(int index) throws IOException {
+        getSlides().remove(index);
+    }
+
+    /**
+     * Call this method when deleting a slide
+     */
+    public void reorderSlide() {
+        for (int i = 0; i < getSlides().size(); i++) {
+            getSlides().get(i).setId(i);
+        }
     }
 }

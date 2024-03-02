@@ -10,11 +10,9 @@ public class ColorButton extends IconButton {
     public ColorButton(ImageIcon imageIcon, int x, int y, int width, int height, String inputButtonRole, MouseHandler inputHandler) {
         super(imageIcon, x, y, width, height, inputButtonRole);
         handler = inputHandler;
-
     }
 
     public void ChangeColorFunction(){
-
         handler.setFontColor();
     }
 }

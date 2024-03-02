@@ -3,6 +3,8 @@ package org.lancaster.group77.DisplayComponents;
 import org.lancaster.group77.FileSystem.CSPPTFile;
 import org.lancaster.group77.FileSystem.Tools.GeneralTools;
 
+import java.util.Objects;
+
 public class Text extends DisplayComponentBase {
     private String text = "";
     private String font = "Arial";
@@ -13,6 +15,11 @@ public class Text extends DisplayComponentBase {
     private boolean italic = false;
     private boolean underline = false;
     private boolean strikethrough = false;
+    private boolean right = false;
+    private boolean left = true;
+    private boolean center = false;
+    private boolean bulletpoint = false;
+    private float line_spacing = 0.5f;
 
     /**
      * Constructor
@@ -20,6 +27,24 @@ public class Text extends DisplayComponentBase {
      */
     public Text() {
         super("text");
+    }
+
+    public Text(double x, double y, int layer,double width1, double height1, String text, String font, String color, String backgroundColor, double font_size, boolean bold, boolean italic, boolean underline, boolean strikethrough, boolean right, boolean left, boolean center, boolean bulletpoint, float line_spacing) {
+        super(x, y, layer, "text", width1, height1);
+        this.text = text;
+        this.font = font;
+        this.color = color;
+        this.backgroundColor = backgroundColor;
+        this.font_size = font_size;
+        this.bold = bold;
+        this.italic = italic;
+        this.underline = underline;
+        this.strikethrough = strikethrough;
+        this.right = right;
+        this.left = left;
+        this.center = center;
+        this.bulletpoint = bulletpoint;
+        this.line_spacing = line_spacing;
     }
 
     /**
@@ -35,18 +60,10 @@ public class Text extends DisplayComponentBase {
      * @param strikethrough
      * @param x
      * @param y
+     * @param right
+     * @param bulletpoint
      */
-    public Text(String text, String font, String color, double font_size, boolean bold, boolean italic, boolean underline, boolean strikethrough, int x, int y) {
-        super(x, y, 0, "text",100,100);
-        this.text = text;
-        this.font = font;
-        this.color = color;
-        this.font_size = font_size;
-        this.bold = bold;
-        this.italic = italic;
-        this.underline = underline;
-        this.strikethrough = strikethrough;
-    }
+
 
 
     public String getText(CSPPTFile cspptFile) {
@@ -89,6 +106,14 @@ public class Text extends DisplayComponentBase {
         this.bold = bold;
     }
 
+    public boolean getBulletpoint() {
+        return bulletpoint;
+    }
+
+    public void setBulletpoint(boolean bulletpoint) {
+        this.bulletpoint = bulletpoint;
+    }
+
     public boolean getItalic() {
         return italic;
     }
@@ -103,6 +128,13 @@ public class Text extends DisplayComponentBase {
 
     public void setUnderline(boolean underline) {
         this.underline = underline;
+    }
+    public boolean getRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
     }
 
     public boolean getStrikethrough() {
@@ -130,5 +162,43 @@ public class Text extends DisplayComponentBase {
     }
     public String getBackgroundColor() {
         return backgroundColor;
+    }
+
+    public boolean getLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public boolean getCenter() {
+        return center;
+    }
+
+    public void setCenter(boolean center) {
+        this.center = center;
+    }
+
+    public float getLine_spacing() {
+        return line_spacing;
+    }
+
+    public void setLine_spacing(float line_spacing) {
+        this.line_spacing = line_spacing;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Text text1 = (Text) object;
+        return Double.compare(getFont_size(), text1.getFont_size()) == 0 && getBold() == text1.getBold() && getItalic() == text1.getItalic() && getUnderline() == text1.getUnderline() && getStrikethrough() == text1.getStrikethrough() && getRight() == text1.getRight() && getLeft() == text1.getLeft() && getCenter() == text1.getCenter() && bulletpoint == text1.bulletpoint && Double.compare(getLine_spacing(), text1.getLine_spacing()) == 0 && Objects.equals(getText(), text1.getText()) && Objects.equals(getFont(), text1.getFont()) && Objects.equals(getColor(), text1.getColor()) && Objects.equals(getBackgroundColor(), text1.getBackgroundColor());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getText(), getFont(), getColor(), getBackgroundColor(), getFont_size(), getBold(), getItalic(), getUnderline(), getStrikethrough(), getRight(), getLeft(), getCenter(), bulletpoint, getLine_spacing());
     }
 }

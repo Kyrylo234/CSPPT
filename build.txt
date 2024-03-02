@@ -1,0 +1,7 @@
+upzip scc210-77.zip
+
+cd scc210-77
+
+mvn compile
+
+mvn exec:java -Dexec.mainClass="org.lancaster.group77.Main" -Dexec.classpathScope=compile

@@ -3,6 +3,8 @@ package org.lancaster.group77.DisplayComponents;
 import org.lancaster.group77.Exceptions.FileDoesNotExistException;
 import org.lancaster.group77.FileSystem.CSPPTFile;
 import org.lancaster.group77.FileSystem.FileInterface;
+import org.lancaster.group77.FileSystem.GlobalVariables;
+import org.lancaster.group77.FileSystem.Tools.GeneralTools;
 import org.lancaster.group77.FileSystem.impl.FileInterfaceImpl;
 
 import javax.imageio.ImageIO;
@@ -12,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 
 public class Image extends DisplayComponentBase {
 
@@ -60,7 +63,7 @@ public class Image extends DisplayComponentBase {
     }
 
     public String getImageBase64() {
-        return this.imageBase64;
+        return GeneralTools.getDataFromDuplicate(GlobalVariables.cspptFrame.getFile(), imageBase64);
     }
 
     public void setImageBase64(String image) {
@@ -68,7 +71,8 @@ public class Image extends DisplayComponentBase {
     }
 
     public String getFileType() {
-        return this.fileType;
+        return GeneralTools.getDataFromDuplicate(GlobalVariables.cspptFrame.getFile(), fileType);
+
     }
 
     public void setFileType(String fileType) {
@@ -112,4 +116,17 @@ public class Image extends DisplayComponentBase {
         return bimage;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Image image = (Image) object;
+        return Objects.equals(getImageBase64(), image.getImageBase64()) && Objects.equals(getFileType(), image.getFileType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getImageBase64(), getFileType());
+    }
 }

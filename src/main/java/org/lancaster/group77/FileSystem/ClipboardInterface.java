@@ -22,4 +22,16 @@ public interface ClipboardInterface {
      * @return the objects from the clipboard
      */
     List<Object> paste();
+
+    /**
+     * Copies the slide number to the clipboard
+     * @param slideNumber
+     */
+    void copySlideNumber(int slideNumber);
+
+    /**
+     * Gets the slide number from the clipboard
+     * @return
+     */
+    int getSlideNumber();
 }

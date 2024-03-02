@@ -10,7 +10,7 @@ import java.awt.*;
 public class InsertShape extends DraggableComponent {
     Image img;
     public InsertShape(int x, int y, int width, int height, MouseHandler listener, JLayeredPane frame, CSPPTFile file){
-        super(x,y,width,height, listener, frame,file);
+        super(x,y,width,height, listener, frame,file,"Shape");
 
         this.setPreferredSize(new Dimension(200,200));
         this.addMouseListener(listener);

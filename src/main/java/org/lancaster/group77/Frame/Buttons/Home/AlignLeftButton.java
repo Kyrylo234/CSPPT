@@ -14,7 +14,6 @@ public class AlignLeftButton extends IconButton {
     }
 
     public void setLeftAlignment(){
-
         handler.LeftAlign();
     }
 }

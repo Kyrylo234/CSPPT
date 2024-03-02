@@ -8,7 +8,7 @@ public class IconButton extends BaseButton {
         super(x,y,width,height, inputButtonRole);
         setBackground(Color.LIGHT_GRAY);
         Image img = imageIcon.getImage();
-        Image scaledImg = img.getScaledInstance(width-4, height-4, Image.SCALE_SMOOTH);
+        Image scaledImg = img.getScaledInstance(width-4, height-4, Image.SCALE_AREA_AVERAGING);
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
 
         this.setIcon(scaledIcon);

@@ -1,28 +1,21 @@
 package org.lancaster.group77.Frame.Bars;
 
-import org.lancaster.group77.FileSystem.CSPPTFile;
-import org.lancaster.group77.FileSystem.impl.ActionListenerImplmenetation;
+import org.lancaster.group77.FileSystem.impl.ActionListenerImplementation;
 import org.lancaster.group77.Frame.Buttons.File.*;
-import org.lancaster.group77.Frame.CSPPTFrame;
 
 import javax.swing.*;
 
 
 public class FileBar extends BaseBar {
-    private NewFileButton newFileButton;
-    private SaveAsButton saveAsButton;
-
-    private SaveButton saveButton;
-    private CSPPTFrame frame;
-    public FileBar(JTabbedPane tabbedPane, JPanel fileTab, ActionListenerImplmenetation listener, CSPPTFrame frame) {
+    private  SaveAsButton saveAsButton;
+    public FileBar(JTabbedPane tabbedPane, JPanel fileTab, ActionListenerImplementation listener) {
         super(tabbedPane,fileTab);
-        this.frame=frame;
         fileTab.setLayout(null);
         //Creates the different buttons
-        newFileButton = new NewFileButton(new ImageIcon("src/main/resources/Icon/File Bar/new_file.png"), 10, 15, 30, 35, "NewFile", this);
-        OpenFileButton openFileButton = new OpenFileButton(new ImageIcon("src/main/resources/Icon/File Bar/open.png"), 60, 15, 30, 35, "OpenFile", this);
-        saveButton = new SaveButton(new ImageIcon("src/main/resources/Icon/File Bar/save.png"), 110, 15, 30, 35, "Save", this);
-        saveAsButton = new SaveAsButton(new ImageIcon("src/main/resources/Icon/File Bar/save_as.png"), 160, 15, 30, 35, "SaveAs", this);
+        NewFileButton newFileButton = new NewFileButton(new ImageIcon("src/main/resources/Icon/File Bar/new_file.png"), 10, 15, 30, 35, "NewFile");
+        OpenFileButton openFileButton = new OpenFileButton(new ImageIcon("src/main/resources/Icon/File Bar/open.png"), 60, 15, 30, 35, "OpenFile");
+        SaveButton saveButton = new SaveButton(new ImageIcon("src/main/resources/Icon/File Bar/save.png"), 110, 15, 30, 35, "Save", this);
+        saveAsButton = new SaveAsButton(new ImageIcon("src/main/resources/Icon/File Bar/save_as.png"), 160, 15, 30, 35, "SaveAs");
         ExportAsPDFButton exportAsPDFButton = new ExportAsPDFButton(new ImageIcon("src/main/resources/Icon/File Bar/export_as_pdf.png"), 210, 15, 30, 35, "ExportAsPDF");
 
         //Adds them to the file tab
@@ -47,10 +40,6 @@ public class FileBar extends BaseBar {
         exportAsPDFButton.addActionListener(listener);
 
         tabbedPane.addTab("File",fileTab);
-    }
-
-    public CSPPTFrame getFrame(){
-        return frame;
     }
 
     public SaveAsButton getSaveAsButton(){
