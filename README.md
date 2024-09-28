@@ -10,10 +10,10 @@ A presentation application designed for computer scientists. Created as part of 
 
 In addition to basic presentation features like shapes, images/videos, graphs/tables,... CSPPT has additional features.
 Unique CSPPT features:
--Code Blocks 
-  -Coding on the spot during a presentation also supported
--UML diagrams
--Integrated Command Line Interface
+- Code Blocks 
+  - Coding on the spot during a presentation also supported
+- UML diagrams
+- Integrated Command Line Interface
 
 ## Visuals
 ###
