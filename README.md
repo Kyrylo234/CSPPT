@@ -4,6 +4,17 @@
 Computer Science PowerPoint (CSPPT)
 
 
+## Build
+unzip scc210-77.zip
+
+cd scc210-77
+
+mvn compile
+
+mvn exec:java -Dexec.mainClass="org.lancaster.group77.Main" -Dexec.classpathScope=compile
+
+
+
 ## Description
 When you enter CSPPT, you will see the following areas:
 
