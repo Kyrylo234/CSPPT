@@ -2,7 +2,11 @@
 
 A **presentation tool for computer science students and developers**, designed to go beyond traditional slides by integrating **UML diagrams, a built-in command line, and live coding support** — all inside your slides.
 
----
+## 🧰 Tech Stack
+<p>
+  <img src="https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white">
+  <img src="https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white">
+</p>
 
 ## ✨ Unique Features
 - **UML Diagram Support**
@@ -12,8 +16,6 @@ A **presentation tool for computer science students and developers**, designed t
   - Text, images, graphs, videos, audio, shapes, and tables  
   - PDF exporting  
   - Animations and transitions  
-
----
 
 ## ⚙️ Build Instructions
 
